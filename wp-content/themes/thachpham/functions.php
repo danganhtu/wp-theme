@@ -169,10 +169,10 @@ if (!function_exists('thachpham_entry_meta')) {
 
 						printf(__('<span class="date-published"> at %1$s', 'thachpham'),
 							get_the_date());
-						printf(__('<span class="category"> in %1$s', 'thachpham'),
-							get_the_category_list( ', '));
+						printf(__('<span class="category"> in %1$s ', 'thachpham'),
+							get_the_category_list( ','));
 
-						if ( comment_open()):
+						/*if ( comment_open()):
 							echo '<span class="meta-reply">';
 								comments_popup_link(
 									__('Leave a comment', 'thachpham'),
@@ -181,9 +181,47 @@ if (!function_exists('thachpham_entry_meta')) {
 									__('Read all comments', 'thachpham')
 									);
 								echo '</span>';
-						endif; 
+						endif; */
 				?>
 			</div>
 		<?php endif; ?>
 	<?php }
+}
+
+/**thachphan_entry_content**/
+if (!function_exists('thachpham_entry_content')){
+	function thachpham_entry_content(){
+		if(!is_single()){
+			the_excerpt();
+		}else{
+			the_content();
+			/*phan trang trong single*/
+			$link_pages = array(
+				'before'=>__('<p>Page: ','thachpham'),
+				'after' => '</p>',  
+				'nextpagelink' => __('Next Page', 'thachpham'),  
+				'previouspagelink' => __('Previous Page','thachpham')
+				);
+			wp_link_pages($link_pages);
+		}
+	}
+}
+
+/* read more */
+function thachpham_readmore(){
+	return '<a class="readmore" href="'.get_permalink(get_the_ID()).'">'.__('...[Read More]','thachpham').'</a>';
+}
+
+add_filter('excerpt_more', 'thachpham_readmore');
+
+
+/*thachpham_entry_tag*/
+if(!function_exists('thachpham_entry_tag')){
+	function thachpham_entry_tag(){
+		if(has_tag()):
+			echo '<div class="entry-tag">';
+			printf(__('Tagged in %1$s','thachpham' ), get_the_tag_list('',','));
+			echo '</div>';
+		endif; 
+	}
 }
